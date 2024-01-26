@@ -1,6 +1,6 @@
 ---
 name: meeting agenda
-about: A template issue for planning meetings
+about: About Project topic and group reorganisation
 title: "Agenda: "
 labels: agenda
 ---
@@ -19,7 +19,8 @@ labels: agenda
 <!-- agenda points -->
 
 - [ ] item 1
-  - description
+  - Group restructring or merging with other teams
 - [ ] item 2
-  - description
-- [ ] ...
+  - Narrow down a topic for the data science project
+- [ ] Item 3
+  - Team Effectiveness - Unmotivated
