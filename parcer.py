@@ -14,7 +14,9 @@ pip install selenium, bs4, html5lib
 
 
 import time
+from datetime import datetime, timezone
 import csv
+import re
 
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
@@ -73,9 +75,9 @@ for l in number_of_rows_s:
 
 number_of_rows = int(number_of_rows)
 
-html = ""
+
 table = {}
-#sourceFile = open('txtoutput.html', 'w', encoding="utf-8")
+# sourceFile = open('txtoutput.html', 'w', encoding="utf-8")
 slider = driver.find_element(
     By.CSS_SELECTOR, "#view > div > div.paneContainer > div.scrollOverlay.antiscroll-wrap > div.antiscroll-scrollbar.antiscroll-scrollbar-vertical.antiscroll-scrollbar-shown")
 
@@ -84,17 +86,20 @@ dist = 3
 data = driver.find_element(By.CSS_SELECTOR, "#view > div > div.paneContainer ")
 index = 0
 
+# Get page height
+page_height = driver.get_window_size()['height']
 
-page_height = driver.get_window_size()['height']  # Get page height
-
-
+# Get table grid heigth
 scroll_pane_height = driver.find_element(
     By.CSS_SELECTOR, "#view > div > div.paneContainer > div.scrollOverlay.antiscroll-wrap").size['height']
 
 
 prev_size = 0
 new_pos = 0
-# while False:
+
+
+regex = r"(\d{1,2}\/\d{1,2}\/\d{4})"
+
 
 prev_loc = 0
 # for i in  range (1):
@@ -106,25 +111,24 @@ while len(table) != number_of_rows:
 
     for row in soup.findAll('div',
                             attrs={"data-rowindex": True}):
-        # print(row["data-rowindex"])
+
         index = int(row["data-rowindex"])
         if index not in table:
             table[index] = []
         text = row.text
         if text == None:
-            text=''
+            text = ""
         info = table.get(index)
-        if text not in info:
+        if text not in info or text == "" or re.search(regex, text):
             table.get(index).append(row.text)
-        # info.append(row.text)
+
     print("Aquired - "+str(len(table))+" - lines")
 
     new_pos = update_pos(page_height, scroll_pane_height, slider.location['y'])
 
-    # ActionChains(driver).drag_and_drop( slider, 0, new_pos).click().perform()
     ActionChains(driver).move_to_element(slider).click_and_hold(
         slider).move_by_offset(0, new_pos).release().perform()
-    time.sleep(2.5)
+    time.sleep(5)
 
     prev_loc = slider.location['y']
     prev_size = len(table)
@@ -136,9 +140,10 @@ out = []
 for i in table:
     row = [i]+table[i]
 
-
     out.append(row)
-
+with open("out.txt", 'w') as file:
+    for line in out:
+        file.write(f"{line}\n")
 
 prev = -1
 is_done = False
@@ -157,8 +162,10 @@ if is_done:
 for o in out:
     print(o)
 
-file = ".layoffs_" +str(time.time())+".csv"
+file = ".layoffs_" + \
+    str(datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S"))+".csv"
 with open(file, 'w', newline='') as output:
-     wr = csv.writer(output,delimiter=';', quoting=csv.QUOTE_MINIMAL)
-     wr.writerow(["id","Company","Location","Industry", "# Laid Off", "%", "Date", "Source", "Country", "Crunchbase","Time added"])
-     wr.writerows(out)
+    wr = csv.writer(output, delimiter=';', quoting=csv.QUOTE_NONNUMERIC)
+    wr.writerow(["id", "Company", "Location", "Industry", "# Laid Off", "%",
+                "Date", "Source", "Country", "Date added", "Crunchbase", "Time added"])
+    wr.writerows(out)
