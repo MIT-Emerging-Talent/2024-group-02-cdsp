@@ -173,9 +173,9 @@ def scrap():
     if is_done:
         print("Everithing correct ")
         print("\nConverting to csv")
-        print("Writing to {name}", file)
         file = "layoffs.fyi_" + \
             str(datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S"))+".csv"
+        print("Writing to {name}", file)
         with open(file, 'w', newline='', encoding="utf-8") as output:
             wr = csv.writer(output, delimiter=';',
                             quoting=csv.QUOTE_NONNUMERIC)
