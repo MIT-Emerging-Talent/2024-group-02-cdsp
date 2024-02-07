@@ -6,9 +6,9 @@ File: parcer.py
 Author: Vlad421
 Date: 2/4/2024
 Description: collects data from layoffs.fyi using Selenium with ChromeDriver
-Requirements: selenium, BeautifulSoup, html5lib
+Requirements: selenium, BeautifulSoup, html5lib, tqdm
 
-pip install selenium, bs4, html5lib
+pip install selenium, bs4, html5lib, tqdm
 
 """
 
@@ -16,7 +16,8 @@ pip install selenium, bs4, html5lib
 import time
 from datetime import datetime, timezone
 import csv
-import re
+
+from random import random
 
 from tqdm import tqdm
 
@@ -30,7 +31,7 @@ from bs4 import BeautifulSoup
 URL_prev = "https://airtable.com/appzLUHyhTU5xpkdZ/shrclnXK0pfoGjtih/tblQ0U46nsYopm2CR"
 columns = ["id", "Company", "Location HQ", "# Laid Off", "Date", "%", "Industry",
            "Source", "List of emploees laid", "Stage", "$ Raised mm", "Country", "Date added"]
-
+dir = "src/"
 
 def scrap():
 
@@ -70,7 +71,7 @@ def scrap():
     URL = "https://airtable.com/app1PaujS9zxVGUZ4/shrqYt5kSqMzHV9R5/tbl8c8kanuNB6bPYr"
 
     driver.get(URL)
-    time.sleep(2)
+    time.sleep(random()*3)
 
     total = "#view > div > div.paneContainer > div.summaryBarContainer > div.leftPaneWrapper > div > div > div > div.absolute.z1.flex-inline.border-top.border-transparent > div"
     number_of_rows_s = driver.find_element(By.CSS_SELECTOR, total).text
@@ -119,18 +120,17 @@ def scrap():
                 table[index] = []
 
             text = row.text
-
-            if (len(table.get(index)) < len(columns)-1) and (text not in table[index] or re.search(regex, text) or re.search(refex_g_docs, text)):
+            
+            if (len(table.get(index)) < len(columns)-1):
 
                 if text == '':
                     text = "no-data"
 
-            # info = table.get(index)
-            # if text not in info or text == "" or re.search(regex, text) or re.search(refex_g_docs, text):
+
                 table.get(index).append(text)
 
         pbar.set_description("Aquired ["+str(len(table))+"] items")
-        # pbar.set_description_str("Aquired - "+str(len(table))+" - lines")
+
         if index > last_index:
             last_index = index
 
@@ -142,29 +142,40 @@ def scrap():
 
         ActionChains(driver).move_to_element(slider).click_and_hold(
             slider).move_by_offset(0, new_pos).release().perform()
-        time.sleep(5)
+        time.sleep(4+random()*4)
 
-    time.sleep(2)
+    time.sleep(2+random()*2)
 
     del pbar
 
     print("Creating list..")
     out = []
-    for i in table:
+
+    for i in tqdm(table):
         line = [i]+table[i]
 
         out.append(line)
 
-    with open("out.log", 'w', encoding="utf-8") as file:
+    print("Checking data")
+    for l in tqdm(out):
+        for i in l:
+            if hasattr(i, '__iter__') and '\n' in i:
+                i.translate({'\n': None})
+
+    print("Writing output to out.log")
+    with open(dir+"out.log", 'w', encoding="utf-8") as file:
         for line in out:
             file.write(f"{line}\n")
-    print("Writing output to out.log")
 
     prev = -1
     is_done = False
-    for i in table:
+    for i in tqdm(table):
         if prev != i-1:
-            print("Something missed")
+            print(f"Something wrong. Check out.log. Not all lines :(id={i})", i)
+            break
+        elif len(out[i]) != len(columns):
+            print(
+                f"Something wrong. Check out.log. Data inconsistant :(id={i})", i)
             break
         else:
             prev = i
@@ -173,9 +184,9 @@ def scrap():
     if is_done:
         print("Everithing correct ")
         print("\nConverting to csv")
-        file = "layoffs.fyi_" + \
+        file = dir+"layoffs.fyi_" + \
             str(datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S"))+".csv"
-        print("Writing to {name}", file)
+        print(f"Writing to {file}")
         with open(file, 'w', newline='', encoding="utf-8") as output:
             wr = csv.writer(output, delimiter=';',
                             quoting=csv.QUOTE_NONNUMERIC)
