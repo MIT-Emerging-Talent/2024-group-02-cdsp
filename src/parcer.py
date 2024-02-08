@@ -200,7 +200,7 @@ def scrap():
         print(f"Writing to {file}")
         with open(file, 'w', newline='', encoding="utf-8") as output:
             wr = csv.writer(output, delimiter=';',
-                            quoting=csv.QUOTE_NONE, escapechar=';')
+                            quoting=csv.QUOTE_ALL)
             wr.writerow(columns)
             wr.writerows(out)
 
