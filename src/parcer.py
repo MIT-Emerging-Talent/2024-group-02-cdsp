@@ -33,7 +33,14 @@ columns = ["id", "Company", "Location HQ", "# Laid Off", "Date", "%", "Industry"
            "Source", "List of emploees laid", "Stage", "$ Raised mm", "Country", "Date added"]
 dir = "src/"
 
+
 def scrap():
+
+    def fix_date(old_date: str) -> str:
+
+        date_format = "%m/%d/%Y"
+
+        return datetime.strptime(old_date, date_format).strftime('%Y-%m-%d')
 
     def update_pos(scrH, panH, curP):
         """Linear relationship function for step position update
@@ -102,8 +109,6 @@ def scrap():
 
     new_pos = 0
 
-    regex = r"(\d{1,2}\/\d{1,2}\/\d{4})"
-    refex_g_docs = r"^(https:\/\/docs.google.com)"
     last_index = -1
 
     prev_count = 0
@@ -120,12 +125,11 @@ def scrap():
                 table[index] = []
 
             text = row.text
-            
+
             if (len(table.get(index)) < len(columns)-1):
 
                 if text == '':
                     text = "no-data"
-
 
                 table.get(index).append(text)
 
@@ -162,6 +166,11 @@ def scrap():
             if hasattr(i, '__iter__') and '\n' in i:
                 i.translate({'\n': None})
 
+    print("Fixing date format")
+    for l in tqdm(out):
+        l[4] = fix_date(l[4])
+        l[12] = fix_date(l[12])
+
     print("Writing output to out.log")
     with open(dir+"out.log", 'w', encoding="utf-8") as file:
         for line in out:
@@ -171,7 +180,8 @@ def scrap():
     is_done = False
     for i in tqdm(table):
         if prev != i-1:
-            print(f"Something wrong. Check out.log. Not all lines :(id={i})", i)
+            print(
+                f"Something wrong. Check out.log. Not all lines :(id={i})", i)
             break
         elif len(out[i]) != len(columns):
             print(
@@ -181,6 +191,7 @@ def scrap():
             prev = i
             if prev+1 == number_of_rows:
                 is_done = True
+
     if is_done:
         print("Everithing correct ")
         print("\nConverting to csv")
@@ -189,7 +200,7 @@ def scrap():
         print(f"Writing to {file}")
         with open(file, 'w', newline='', encoding="utf-8") as output:
             wr = csv.writer(output, delimiter=';',
-                            quoting=csv.QUOTE_NONNUMERIC)
+                            quoting=csv.QUOTE_NONE, escapechar=';')
             wr.writerow(columns)
             wr.writerows(out)
 
