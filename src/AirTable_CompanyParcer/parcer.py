@@ -16,6 +16,7 @@ pip install selenium, bs4, html5lib, tqdm
 import time
 from datetime import datetime, timezone
 import csv
+import os
 
 from random import random
 
@@ -31,7 +32,7 @@ from bs4 import BeautifulSoup
 URL_prev = "https://airtable.com/appzLUHyhTU5xpkdZ/shrclnXK0pfoGjtih/tblQ0U46nsYopm2CR"
 columns = ["id", "Company", "Location HQ", "# Laid Off", "Date", "%", "Industry",
            "Source", "List of emploees laid", "Stage", "$ Raised mm", "Country", "Date added"]
-dir = "src/"
+dir = os.path.dirname(os.path.relpath(__file__)) + '/'
 
 
 def scrap():
