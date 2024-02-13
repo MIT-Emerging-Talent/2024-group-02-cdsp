@@ -1,6 +1,6 @@
 ## Layoff Dataset Overview
 
-This document provides a brief overview of the layoff dataset, which compiles information about company layoffs across various industries. Below is a summary of what each column in the dataset represents:
+This document provides a brief overview of the layoff dataset, which compiles information about company layoffs across various industries. The dataset contains information on tech layoffs, with 3,429 entries and 13 columns. Below is a summary of what each column in the dataset represents:
 
 - **id**: A unique identifier for each entry.
 - **Company**: The name of the company.
