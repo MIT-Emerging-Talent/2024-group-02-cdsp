@@ -1,4 +1,13 @@
-# Project Idea: Trending Layoffs in the IT Sector
+# CDSP Project Group 2 README.md
+
+This repository is a research conducted by group 02 which consists of Emerging Talent participants in an attempt to clarify the current situation in the information technology market nowadays.
+
+<img alt="IT market image" src="https://i.itbusiness.ca/wp-content/uploads/2014/08/iStock_000038042554Small-e1408392579207-620x250.jpg">
+
+<br>
+
+
+## Project Idea: Trending Layoffs in the IT Sector
 
 ## Domain: IT Sector
 
