@@ -19,3 +19,23 @@ A major challenge in this study is the lack of specific layoff numbers for each 
 This research is especially relevant to our cohort and the students at MIT Emerging Talent who are likely to seek employment in the IT field. Given the increasing reliance on technology and remote work, IT skills have become nearly indispensable. However, the IT sector is vast and continuously branching into numerous subfields.
 
 ### Data Modeling Strategy
+
+
+## A Multi-Variable Analysis Approach
+
+### Objectives:
+- Conduct exploratory data analysis to uncover patterns and insights related to tech layoffs.
+- Identify potential factors contributing to tech layoffs and their effects on the industry.
+- Explore temporal, geographic, and industry-specific trends in tech layoffs.
+- Investigate correlations between company characteristics (e.g., stage, funding) and layoff likelihood.
+- Assess the scale and impact of tech layoffs in terms of affected employees and industries.
+
+### Dimensions of Analysis:
+- **Trend Over Time:** Understand how tech layoffs have evolved over time.
+- **Geographic Distribution:** Analyze the locations of companies conducting layoffs.
+- **Impact by Industry:** Identify the tech sectors most affected by layoffs.
+- **Company Stage and Financial Health:** Investigate how a company's stage and funding relate to layoff likelihood.
+- **Scale of Layoffs:** Assess the magnitude of layoffs in terms of affected employees.
+- **Correlation Analysis:** Explore if layoff timing correlates with specific geographic locations.
+
+Using the above mentioned various perspectives we'll be examining and analyzing our data on tech layoffs.
