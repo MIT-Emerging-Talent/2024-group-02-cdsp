@@ -35,6 +35,7 @@ columns = ["id", "Company", "Location HQ", "# Laid Off", "Date", "%", "Industry"
 dir = os.path.dirname(os.path.relpath(__file__)) + '/'
 
 
+
 def scrap():
 
     def fix_date(old_date: str) -> str:
