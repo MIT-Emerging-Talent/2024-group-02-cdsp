@@ -30,8 +30,8 @@ from bs4 import BeautifulSoup
 
 
 URL_prev = "https://airtable.com/appzLUHyhTU5xpkdZ/shrclnXK0pfoGjtih/tblQ0U46nsYopm2CR"
-columns = ["id", "Company", "Location HQ", "# Laid Off", "Date", "%", "Industry",
-           "Source", "List of emploees laid", "Stage", "$ Raised mm", "Country", "Date added"]
+columns = ["id", "Company", "Location HQ", "# Laid Off", "Date", "%", "Industry", "Source", "List of emploees laid", "Stage", "$ Raised mm", "Country", "Date added","Is US based"]
+
 dir = os.path.dirname(os.path.relpath(__file__)) + '/'
 
 
@@ -127,7 +127,7 @@ def scrap():
 
             text = row.text
 
-            if (len(table.get(index)) < len(columns)-1):
+            if (len(table.get(index)) < len(columns)-2):
 
                 if text == '':
                     text = "no-data"
@@ -164,34 +164,50 @@ def scrap():
     print("Checking data")
     for l in tqdm(out):
         for i in l:
-            if hasattr(i, '__iter__') and '\n' in i:
-                i.translate({'\n': None})
+            if hasattr(i, '__iter__') and '\n' in i :
+                 i = i.replace('\n','')
+            elif hasattr(i, '__iter__') and  "/\n" in i:
+                 i = i.replace("/\n",'')
 
     print("Fixing date format")
     for l in tqdm(out):
         l[4] = fix_date(l[4])
         l[12] = fix_date(l[12])
 
+
+
+    # add US, Non US column
+   
+    for l in out:
+        if "Non-U.S." in l[2]:
+            l[2]=l[2].replace("Non-U.S.", '')
+            l.append("No")
+        else:
+            l.append("Yes")
+
     print("Writing output to out.log")
     with open(dir+"out.log", 'w', encoding="utf-8") as file:
         for line in out:
             file.write(f"{line}\n")
 
+            
     prev = -1
     is_done = False
     for i in tqdm(table):
         if prev != i-1:
             print(
-                f"Something wrong. Check out.log. Not all lines :(id={i})", i)
+                f"Something wrong. Check out.log. Not all lines :(id={i})")
             break
         elif len(out[i]) != len(columns):
             print(
-                f"Something wrong. Check out.log. Data inconsistant :(id={i})", i)
+                f"Something wrong. Check out.log. Data inconsistant :(id={i})")
             break
         else:
             prev = i
             if prev+1 == number_of_rows:
                 is_done = True
+
+        
 
     if is_done:
         print("Everithing correct ")
