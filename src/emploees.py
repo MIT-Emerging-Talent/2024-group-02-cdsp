@@ -1,3 +1,18 @@
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Python Version: 3.12
+"""
+File: emploees.py
+Author: Vlad421
+Date: 2/10/2024
+Description: collects provided data of emploees from layoffs.fyi 
+Requirements: selenium, BeautifulSoup, html5lib, tqdm
+
+pip install requests, tqdm
+
+"""
+
 import csv
 import os
 
@@ -40,7 +55,7 @@ print("Clearing links")
 pat = "((edit.*)|(html.*)|(viewform.*))"
 deletion = []
 for i in range(len(empl_list_src)):
-    empl_list_src[i]: str = re.sub(
+    empl_list_src[i] = re.sub(
         pat, "gviz/tq?tqx=out:csv", empl_list_src[i])
     if "forms" in empl_list_src[i]:
         deletion.append(empl_list_src[i])
