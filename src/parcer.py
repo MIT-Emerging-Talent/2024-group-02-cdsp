@@ -4,6 +4,7 @@
 """
 File: parcer.py
 Author: Vlad421
+
 Date: 2/4/2024
 Description: collects data from layoffs.fyi using Selenium with ChromeDriver
 Requirements: selenium, BeautifulSoup, html5lib, tqdm
