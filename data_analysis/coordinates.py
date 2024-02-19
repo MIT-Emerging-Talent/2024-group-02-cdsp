@@ -1,9 +1,14 @@
+import os
 
 from threading import Thread
 import pandas as pd
 from geopy.geocoders import Nominatim
 
-data = pd.read_csv("src/layoffs.fyi_20240213_201617.csv", sep=';')
+dir = os.path.dirname(os.path.relpath(__file__)) 
+
+file = dir+"../src/layoffs.fyi_20240213_201617.csv"
+print(file)
+data = pd.read_csv(file, sep=';')
 
 # Manual fix wrong city name spelling. If noted print output ex. "Shenzen - None", need to manualy add spelling replacement
 data.replace({"Location HQ": "Shenzen"}, "Shenzhen", inplace=True)
@@ -31,21 +36,10 @@ def locate_coord( start, end):
         location = geolocator.geocode(data.iloc[i]["Location HQ"], timeout=5)
         if location:
             data.loc[i,"Lat"], data.loc[i,"Lon"] = location.latitude, location.longitude
-            print(i)
+            
         else:
-            print(str(data.iloc[i]["Location HQ"]) + " - None")
+            print(str(data.iloc[i]["Location HQ"]) + " - None"+". Add to spelling fix at the top of script")
         
-        
-
-    #location = geolocator.geocode(row["Location HQ"], timeout=5)
-"""
-    if location:
-        print(row["id"])
-        # print(str(row["Location HQ"]) + " " +str(location.latitude)+" "+str(location.longitude))
-        return location.latitude, location.longitude
-    else:
-        print(str(row["Location HQ"]) + " - None")
-        return None, None"""
 
 
 # Clear data
@@ -59,7 +53,7 @@ data.reset_index(drop=True, inplace=True)
 
 rows = len(data.index)
 
-tr:Thread = []
+tr:list[Thread] = []
 for t in range(threads):
     part = rows//threads
     if t < threads-1:
@@ -79,8 +73,6 @@ for t in tr:
 
 
 
-#data["Lat"], data["Lon"] = zip(*data.apply(locate_coord, axis=1))
+data.to_csv("src/data_coord.csv", encoding='utf-8', sep=";")
 
-data.to_csv("src/data_coord.csv", encoding='utf-8')
 
-print(data)
