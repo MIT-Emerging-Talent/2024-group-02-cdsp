@@ -1,0 +1,2 @@
+Python was used as a programming language to analyse the collected data so that we can get useful information from data about our problem which is the status about the tech layoff in 2024.
+More details are fund [here]([text](../../analysis/pandas_analyse.ipynb))
