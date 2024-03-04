@@ -1,6 +1,6 @@
 |                  |                                                                                               |
 | ---------------- | --------------------------------------------------------------------------------------------- |
-| Data description | [here]([text](../../../src/layoff_dataset_overview.md))                                          |
+| Data description | [here]([text](src/layoff_dataset_overview.md))                                                |
 | Data             | [collection]([text](../../../src/parcer.py))                                                     |
 |                  | [processing_countries]([text](../../../data_analysis/map.ipynb))                                 |
 |                  | [processing_coordinates]([text](../../../data_analysis/coordinates.py))                          |
