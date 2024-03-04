@@ -7,9 +7,9 @@ File: emploees.py
 Author: Vlad421
 Date: 2/10/2024
 Description: collects provided data of emploees from layoffs.fyi 
-Requirements: selenium, BeautifulSoup, html5lib, tqdm
+Requirements:   requests, tqdm
 
-pip install requests, tqdm
+pip install requests tqdm 
 
 """
 
