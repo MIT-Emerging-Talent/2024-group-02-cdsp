@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Python Version: 3.12
+"""
+File: coordinates.py
+Author: Vlad421
+Date: 2/23/2024
+Description: collects provided data of emploees from layoffs.fyi 
+Requirements: pandas, geopy
+
+pip install pandas geopy
+
+"""
+
 import os
 
 from threading import Thread
