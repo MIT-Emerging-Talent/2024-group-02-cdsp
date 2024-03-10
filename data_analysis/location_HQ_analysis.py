@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the data
-file_path = 'YOUR_PATH_HERE/cleaned_tech_layoffs_data.csv'  # Modify this path to your local file location
+file_path = 'src/cleaned_tech_layoffs_data.csv'  # Modify this path to your local file location
 data = pd.read_csv(file_path)
 
 # Analysis for top 10 layoff locations
